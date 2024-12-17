@@ -10,9 +10,8 @@ import router from './router';
 
 function checkToken(){
   const token = ref(localStorage.getItem('token'));
-  if (!token.value) {
+  if (token.value==null) {
     console.log("Welcome to");
-    console.log(token.value,888);
   }else{
     router.push("/login")
   }
