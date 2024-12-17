@@ -67,7 +67,7 @@
             class="bg-green-500 text-white py-2 rounded-xl hover:bg-green-700 duration-300 font-medium"
             type="button"
           >
-            Login
+            {{ isLoading ? "Loading..." : "Login"}}
           </button>
         </form>
         <div
@@ -102,8 +102,9 @@ import Toast from 'primevue/toast';
 import { useToast } from 'primevue/usetoast';
 
 const toast = useToast();
-
 const seePassword=ref(false)
+const isLoading=ref(false)
+
 const phoneNumber = ref("");
 const password=ref("");
 
@@ -115,7 +116,9 @@ const showSuccess = () => {
     toast.add({ severity: 'success', summary: 'Success Message', detail: 'Xush Kelibsiz', life: 3000 });
 };
 function login() {
+  isLoading.value=true
  if(password.value=="" && password.value==""){
+  isLoading.value=false;
   showError()
  }else{
    axios
@@ -136,9 +139,11 @@ function login() {
         showSuccess()
         localStorage.setItem("token", response.data.token);
         router.push("/");
+        isLoading.value=false
       }
     })
     .catch((error) => {
+      isLoading.value=false;
       console.error("Xatolik yuz berdi:", error);
     });
  }
