@@ -12,6 +12,7 @@ function checkToken(){
   const token = ref(localStorage.getItem('token'));
   if (!token.value) {
     console.log("Welcome to");
+    console.log(token.value,888);
   }else{
     router.push("/login")
   }
