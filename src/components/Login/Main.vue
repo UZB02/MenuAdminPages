@@ -1,28 +1,31 @@
 <template>
   <section
-    class="bg-gray-100 min-h-screen flex box-border justify-center items-center"
+    class="bg-gray-100 min-h-screen p-5 flex box-border justify-center items-center"
   >
-    <div class="bg-[#dfa674] rounded-2xl flex max-w-3xl p-5 items-center">
-      <div class="md:w-1/2 px-8">
-        <h2 class="font-bold text-3xl text-[#002D74]">Login</h2>
-        <p class="text-sm mt-4 text-[#002D74]">
+  <Toast style="max-width: 300px;"></Toast>
+    <div class="bg-slate-800 rounded-2xl flex max-w-3xl md:p-5 p-2 items-center">
+      <div class="md:w-1/2 px-2 md:px-8">
+        <h2 class="font-bold text-3xl text-white">Login</h2>
+        <p class="text-sm mt-4 text-white">
           Agar siz oldin ro'yxatdan o'tgan bo'lsangiz!
         </p>
 
         <form action="" class="flex flex-col gap-4">
           <input
-            class="p-2 mt-8 rounded-xl border"
-            type="email"
-            name="email"
-            placeholder="Email"
+            class="p-2 mt-8 rounded-xl outline-none border"
+            type="text"
+            name="text"
+            placeholder="+998901234567"
+            v-model="phoneNumber"
           />
           <div class="relative">
             <input
-              class="p-2 rounded-xl border w-full"
-              type="password"
+              class="p-2 rounded-xl border outline-none w-full"
+              :type="seePassword ? 'text' : 'password'"
               name="password"
               id="password"
-              placeholder="Password"
+              v-model="password"
+              :placeholder="seePassword ? 'Password' : '*******'"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +33,8 @@
               height="16"
               fill="gray"
               id="togglePassword"
-              class="bi bi-eye absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer z-20 opacity-100"
+              @click="seePassword =!seePassword"
+              :class="seePassword ? 'bi bi-eye-slash-fill absolute top-1/2 right-3 -z-1 -translate-y-1/2 cursor-pointer block' : 'bi bi-eye-slash-fill absolute top-1/2 right-3 -z-1 -translate-y-1/2 cursor-pointer hidden'"
               viewBox="0 0 16 16"
             >
               <path
@@ -45,7 +49,8 @@
               width="16"
               height="16"
               fill="currentColor"
-              class="bi bi-eye-slash-fill absolute top-1/2 right-3 -z-1 -translate-y-1/2 cursor-pointer hidden"
+              @click="seePassword =!seePassword"
+              :class="seePassword ? 'bi bi-eye-slash-fill absolute top-1/2 right-3 -z-1 -translate-y-1/2 cursor-pointer hidden' : 'bi bi-eye-slash-fill absolute top-1/2 right-3 -z-1 -translate-y-1/2 cursor-pointer block'"
               id="mama"
               viewBox="0 0 16 16"
             >
@@ -59,20 +64,20 @@
           </div>
           <button
             @click="login()"
-            class="bg-[#002D74] text-white py-2 rounded-xl hover:scale-105 duration-300 hover:bg-[#206ab1] font-medium"
+            class="bg-green-500 text-white py-2 rounded-xl hover:bg-green-700 duration-300 font-medium"
             type="button"
           >
             Login
           </button>
         </form>
         <div
-          class="mt-4 text-sm flex justify-between items-center container-mr"
+          class="mt-4 text-sm flex flex-col md:flex-row gap-2 justify-between items-center container-mr"
         >
-          <p class="mr-3 md:mr-0">
+          <p class="mr-3 md:mr-0 text-white">
             Agar siz ro'yxatdan o'tmagan bo'lsangiz Register tugmasini bosing..
           </p>
           <button
-            class="hover:border register text-white bg-[#002D74] hover:border-gray-400 rounded-xl py-2 px-5 hover:scale-110 hover:bg-[#002c7424] font-semibold duration-300"
+            class=" register text-white underline font-semibold duration-300"
           >
             Register
           </button>
@@ -92,13 +97,33 @@
 import router from "@/router";
 import axios from "axios";
 import { ref } from "vue";
+
+import Toast from 'primevue/toast';
+import { useToast } from 'primevue/usetoast';
+
+const toast = useToast();
+
+const seePassword=ref(false)
+const phoneNumber = ref("");
+const password=ref("");
+
+const showError = () => {
+    toast.add({ severity: 'error', summary: 'Error Message', detail: `Ma'lumotlarni qayta tekshiring!`, life: 3000 });
+};
+
+const showSuccess = () => {
+    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Xush Kelibsiz', life: 3000 });
+};
 function login() {
-  axios
+ if(password.value=="" && password.value==""){
+  showError()
+ }else{
+   axios
     .post(
       `https://menu-cafe.onrender.com/api/admin/login`,
       {
-        phoneNumber: "+998913442005",
-        password: "1212",
+        phoneNumber: phoneNumber.value,
+        password: password.value,
       },
       {
         headers: {
@@ -107,11 +132,16 @@ function login() {
       }
     )
     .then((response) => {
-      console.log("Muvaffaqiyatli kirish:", response);
+      if(response.status == 200) {
+        showSuccess()
+        localStorage.setItem("token", response.data.token);
+        router.push("/");
+      }
     })
     .catch((error) => {
       console.error("Xatolik yuz berdi:", error);
     });
+ }
 }
 </script>
 <style scoped></style>

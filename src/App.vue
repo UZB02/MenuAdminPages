@@ -8,12 +8,13 @@ const layout = computed(() => route.meta.layout || AppLayout);
 import { ref } from 'vue';
 import router from './router';
 
-function checkToken(){
-  const token = ref(localStorage.getItem('token'));
-  if (token.value==null) {
+
+function checkToken() {
+  const token = localStorage.getItem('token'); 
+  if (token) {
     console.log("Welcome to");
-  }else{
-    router.push("/login")
+  } else {
+    router.push("/login"); 
   }
 }
 checkToken();
