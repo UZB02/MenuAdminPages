@@ -1,6 +1,13 @@
 <script setup>
+import router from '@/router';
+import Button from 'primevue/button';
+import 'primeicons/primeicons.css'
+function logout(){
+  localStorage.removeItem("token")
+  router.push("/login")
+}
 </script>
 
 <template>
-  <h1 v-motion-roll-visible-left>Salom Home</h1>
+   <Button type="button" label="Logout" icon="pi pi-sign-out" :loading="loading" @click="logout" />
 </template>
