@@ -3,7 +3,8 @@
     class="bg-gray-100 min-h-screen p-5 flex box-border justify-center items-center"
   >
   <Toast style="max-width: 300px;"></Toast>
-    <div class="bg-slate-800 rounded-2xl flex max-w-3xl md:p-5 p-2 items-center">
+    <div class="bg-slate-800 rounded-2xl flex max-w-3xl h-[70
+    vh] md:p-5 p-2 items-center">
       <div class="md:w-1/2 px-2 md:px-8">
         <h2 class="font-bold text-3xl text-white">Login</h2>
         <p class="text-sm mt-4 text-white">
