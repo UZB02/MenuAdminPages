@@ -21,9 +21,7 @@ checkToken();
 </script>
 
 <template>
-  <header class="w-full shadow sticky top-0 bg-white">
-    <Nav></Nav>
-  </header>
+  
   <component :is="layout">
     <RouterView />
   </component>
