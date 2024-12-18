@@ -12,8 +12,8 @@
       <div
         class="w-full text-center p-4 flex flex-col items-center justify-center gap-2"
       >
-        <h1 class="font-bold text-xl">Kataloglar</h1>
-        <RouterLink to="/" class="w-full">
+        <h1 class="font-bold text-xl">{{item.title}}</h1>
+        <RouterLink :to="item.path" class="w-full">
           <div
             class="w-full text-center bg-green-500 py-2 text-white rounded-2xl"
           >
