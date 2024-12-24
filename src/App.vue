@@ -21,7 +21,6 @@ checkToken();
 </script>
 
 <template>
-  
   <component :is="layout">
     <RouterView />
   </component>

@@ -2,7 +2,7 @@
   <div
     class="w-full grid md:grid-cols-3 grid-cols-1 gap-3 items-center justify-center px-3"
   >
-    <div
+    <div v-motion-pop-visible
       v-for="item in pages"
       class="card shadow border bg-white rounded-lg flex items-center justify-center flex-col gap-2 transition duration-150"
     >
@@ -35,7 +35,7 @@ import { ref } from "vue";
 const pages = [
   {
     id: 1,
-    path: "/",
+    path: "/catalogues",
     title: "Kataloglar",
     img: "https://avatars.mds.yandex.net/i?id=f595e5aac2659aaf06bcfc1f98052b71_l-5026122-images-thumbs&ref=rim&n=13&w=900&h=900",
   },
@@ -47,7 +47,7 @@ const pages = [
   },
   {
     id: 3,
-    path: "/",
+    path: "/admins",
     title: "Adminlar",
     img: "https://cdn4.iconfinder.com/data/icons/project-management-6-2/65/256-1024.png",
   },

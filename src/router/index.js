@@ -38,6 +38,22 @@ const router = createRouter({
         layout: AuthLayout,
       },
     },
+    {
+      path: "/admins",
+      name: "Admins",
+      component: () => import("../views/AdminsView.vue"),
+      meta: {
+        layout: AppLayout,
+      },
+    },
+    {
+      path: "/catalogues",
+      name: "Catalogues",
+      component: () => import("../views/CataloguesView.vue"),
+      meta: {
+        layout: AppLayout,
+      },
+    },
   ],
 });
 

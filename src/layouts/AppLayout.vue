@@ -1,5 +1,5 @@
 <template>
-  <header class="w-full shadow sticky top-0 bg-white">
+  <header class="w-full shadow sticky top-0 z-50 bg-white">
     <Nav></Nav>
   </header>
   <RouterView></RouterView>
