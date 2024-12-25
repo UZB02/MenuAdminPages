@@ -15,7 +15,7 @@
           type="text"
           v-model="searchValue"
           placeholder="Qidirish"
-          class="border outline-green-500 w-full rounded-lg p-2"
+          class="border outline-green-500 w-full shadow-md rounded-lg p-2"
         />
         <!-- <button @click="SearchFunction" class="bg-black p-2 text-white transition-all duration-200 active:scale-90 rounded-lg">Qidirish</button> -->
       </div>
@@ -55,7 +55,7 @@
           @click="DeleteModal(item._id)"
           class="pi pi-trash text-red-500 cursor-pointer"
         ></i>
-        <i class="pi pi-pencil cursor-pointer text-amber-800"></i>
+        <i @click="editModal(item._id)" class="pi pi-pencil cursor-pointer text-amber-800"></i>
       </div>
     </span>
   </div>
@@ -85,7 +85,7 @@
     :style="{ width: '25rem' }"
   >
     <span class="text-surface-500 dark:text-surface-400 block mb-8">
-        <input type="text" placeholder="Katalog nomi" class="border w-full p-2 rounded-lg outline-green-500">
+        <input type="text" v-model="addinput" placeholder="Katalog nomi" class="border w-full p-2 rounded-lg outline-green-500">
     </span>
     <div class="flex justify-end gap-2">
       <Button
@@ -94,10 +94,30 @@
         severity="secondary"
         @click="addmodal=false"
       ></Button>
-      <Button type="button" severity="success" label="Qo'shish" @click="addCatalogue()"></Button>
+      <Button type="button" severity="success" :label="loadingbtn ? 'Loading...' : 'Qo\'shish'" @click="addCatalogue()"></Button>
     </div>
   </Dialog>
   <!-- End Add Modal -->
+      <!-- Begin Edit Modal -->
+      <Dialog
+    v-model:visible="editmodal"
+    header="Tahrirlash"
+    :style="{ width: '25rem' }"
+  >
+    <span class="text-surface-500 dark:text-surface-400 block mb-8">
+        <input type="text" v-model="editinput" placeholder="Katalog nomi" class="border w-full p-2 rounded-lg outline-green-500">
+    </span>
+    <div class="flex justify-end gap-2">
+      <Button
+        type="button"
+        label="Bekor qilish"
+        severity="secondary"
+        @click="editmodal=false"
+      ></Button>
+      <Button type="button" severity="success" :label="loadingbtn ? 'Loading...' : 'Tahrirlash'" @click="editCatalogue()"></Button>
+    </div>
+  </Dialog>
+  <!-- End Edit Modal -->
 </template>
 <script setup>
 import axios from "axios";
@@ -109,13 +129,18 @@ import Button from "primevue/button";
 import Dialog from "primevue/dialog";
 import Toast from "primevue/toast";
 import { useToast } from "primevue/usetoast";
-const toast = useToast();
+let catalogues = ref([]);
 
+const toast = useToast();
 const isloading = ref(true);
+const loadingbtn=ref(false);
 const searchValue = ref("");
 const notfound = ref(false);
 const visible = ref(false);
 const addmodal= ref(false);
+const addinput= ref('');
+const editmodal=ref(false);
+const editinput= ref('');
 let productID = ref();
 const foundItem= ref()
 
@@ -125,13 +150,61 @@ function addModal(){
 }
 
 function addCatalogue(){
-    showSuccess()
-    GetCatalogues()
-    addmodal.value=false;
+  loadingbtn.value=true;
+    axios
+    .post(`https://menu-cafe.onrender.com/api/category/create`,
+    {
+      name:addinput.value,
+    }, 
+    {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjc1ZjBhMjA0ZDY2YWViM2Q1ZTk0ODFjIiwiaWF0IjoxNzM0Mzc0MzMyLCJleHAiOjE3MzY5NjYzMzJ9.NfHGphyboMaDe1xelel8ZLpr9arn5Ffe2_HSaD7xqP0`,
+      },
+    })
+    .then((response) => {
+      if (response.status == 200) {
+        loadingbtn.value=false;
+        addmodal.value=false;
+        showSuccess()
+        GetCatalogues();
+        console.log(response);
+      }
+    })
+    .catch((error) => {
+      console.error("Xatolik yuz berdi:", error);
+    });
 }
 
-
-let catalogues = ref([]);
+function editModal(id){
+  productID.value=id
+  editmodal.value=true;
+  let findobekt=catalogues.value.find((item)=>item._id==id)
+  editinput.value=findobekt?.name
+}
+function editCatalogue(){
+  loadingbtn.value=true;
+    axios
+    .put(`https://menu-cafe.onrender.com/api/category/${productID.value}`,
+    {
+      name:editinput.value,
+    }, 
+    {
+      headers: {
+        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjc1ZjBhMjA0ZDY2YWViM2Q1ZTk0ODFjIiwiaWF0IjoxNzM0Mzc0MzMyLCJleHAiOjE3MzY5NjYzMzJ9.NfHGphyboMaDe1xelel8ZLpr9arn5Ffe2_HSaD7xqP0`,
+      },
+    })
+    .then((response) => {
+      if (response.status == 200) {
+        loadingbtn.value=false;
+        editmodal.value=false;
+        showSuccess()
+        GetCatalogues();
+      }
+    })
+    .catch((error) => {
+      console.error("Xatolik yuz berdi:", error);
+    });
+}
 
 const search = computed(() => {
   if (searchValue.value) {
@@ -168,28 +241,6 @@ function GetCatalogues() {
 }
 GetCatalogues();
 
-// function EditeCatalogues(id) {
-//     console.log(id);
-//     axios
-//     .get(
-//         `https://menu-cafe.onrender.com/api/category/${id}`,
-//         {
-//             headers: {
-//                 Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjc1ZjBhMjA0ZDY2YWViM2Q1ZTk0ODFjIiwiaWF0IjoxNzM0Mzc0MzMyLCJleHAiOjE3MzY5NjYzMzJ9.NfHGphyboMaDe1xelel8ZLpr9arn5Ffe2_HSaD7xqP0`,
-//             },
-//         }
-//         )
-//         .then((response) => {
-//             if(response.status == 200) {
-//                 GetCatalogues();
-//         console.log(response);
-//       }
-//     })
-//     .catch((error) => {
-//       console.error("Xatolik yuz berdi:", error);
-//     });
-// }
-
 function DeleteModal(id) {
   productID.value = id;
   visible.value = true;
@@ -197,9 +248,8 @@ function DeleteModal(id) {
 }
 function DeleteCatalogues(id) {
   id = productID.value;
-  console.log(id);
   axios
-    .get(`https://menu-cafe.onrender.com/api/category/${id}`, {
+    .delete(`https://menu-cafe.onrender.com/api/category/${id}`, {
       headers: {
         Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjc1ZjBhMjA0ZDY2YWViM2Q1ZTk0ODFjIiwiaWF0IjoxNzM0Mzc0MzMyLCJleHAiOjE3MzY5NjYzMzJ9.NfHGphyboMaDe1xelel8ZLpr9arn5Ffe2_HSaD7xqP0`,
       },
@@ -209,7 +259,6 @@ function DeleteCatalogues(id) {
         visible.value = false;
         showSuccess()
         GetCatalogues();
-        console.log(response);
       }
     })
     .catch((error) => {
