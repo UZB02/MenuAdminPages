@@ -77,7 +77,7 @@
     </div>
   </Dialog>
   <!-- End Delete Modal -->
-     <Toast />
+     <Toast style="max-width: 300px;"/>
       <!-- Begin Add Modal -->
       <Dialog
     v-model:visible="addmodal"
