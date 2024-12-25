@@ -1,7 +1,6 @@
 <template>
-    <section>
+    <section class="xs:p-5 p-1">
         <div class="container">
-            <h1>Adminlar</h1>
             <AdminsCard></AdminsCard>
         </div>
     </section>

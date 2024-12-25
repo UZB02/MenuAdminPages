@@ -20,7 +20,7 @@
         <!-- <button @click="SearchFunction" class="bg-black p-2 text-white transition-all duration-200 active:scale-90 rounded-lg">Qidirish</button> -->
       </div>
       <button
-      @click="addModal()"
+        @click="addModal()"
         class="bg-green-500 xs:w-auto w-full p-2 text-white transition-all duration-200 active:scale-90 rounded-lg"
       >
         Katalog Qo'shish
@@ -44,7 +44,7 @@
       v-motion-slide-visible-bottom
       v-for="(item, itemkey) in search"
       ::key="itemkey"
-      class="p-4 flex items-center justify-between text-center relative bg-slate-100 rounded-lg transition-all duration-150 ease-linear hover:scale-[1.02]"
+      class="p-4 flex items-center justify-between text-center relative bg-slate-100 rounded-lg transition-all duration-150 ease-linear hover:bg-slate-300"
     >
       <div class="flex items-center gap-2">
         <h2 class="font-bold text-slate-500">{{ itemkey + 1 }}.</h2>
@@ -55,7 +55,10 @@
           @click="DeleteModal(item._id)"
           class="pi pi-trash text-red-500 cursor-pointer"
         ></i>
-        <i @click="editModal(item._id)" class="pi pi-pencil cursor-pointer text-amber-800"></i>
+        <i
+          @click="editModal(item._id)"
+          class="pi pi-pencil cursor-pointer text-amber-800"
+        ></i>
       </div>
     </span>
   </div>
@@ -65,7 +68,9 @@
     :header="foundItem?.name"
     :style="{ width: '25rem' }"
   >
-    <span class="text-surface-500 dark:text-surface-400 block mb-8">Katalog o'chirilsinmi?</span>
+    <span class="text-surface-500 dark:text-surface-400 block mb-8"
+      >Katalog o'chirilsinmi?</span
+    >
     <div class="flex justify-end gap-2">
       <Button
         type="button"
@@ -73,49 +78,81 @@
         severity="secondary"
         @click="visible = false"
       ></Button>
-      <Button type="button" severity="danger" label="Delete" @click="DeleteCatalogues()"></Button>
+      <Button
+        type="button"
+        severity="danger"
+        :disabled="loadingbtn"
+        :label="loadingbtn ? 'Loading...' : 'O\'chirish'"
+        @click="DeleteCatalogues()"
+      ></Button>
     </div>
   </Dialog>
   <!-- End Delete Modal -->
-     <Toast style="max-width: 300px;"/>
-      <!-- Begin Add Modal -->
-      <Dialog
+  <Toast style="max-width: 300px" />
+  <!-- Begin Add Modal -->
+  <Dialog
     v-model:visible="addmodal"
     header="Katalog qo'shish"
     :style="{ width: '25rem' }"
   >
-    <span class="text-surface-500 dark:text-surface-400 block mb-8">
-        <input type="text" v-model="addinput" placeholder="Katalog nomi" class="border w-full p-2 rounded-lg outline-green-500">
-    </span>
-    <div class="flex justify-end gap-2">
-      <Button
-        type="button"
-        label="Bekor qilish"
-        severity="secondary"
-        @click="addmodal=false"
-      ></Button>
-      <Button type="button" severity="success" :label="loadingbtn ? 'Loading...' : 'Qo\'shish'" @click="addCatalogue()"></Button>
-    </div>
+    <form>
+      <span class="text-surface-500 dark:text-surface-400 block mb-8">
+        <input
+          type="text"
+          v-model="addinput"
+          placeholder="Katalog nomi"
+          class="border w-full p-2 rounded-lg outline-green-500"
+        />
+      </span>
+      <div class="flex justify-end gap-2">
+        <Button
+          type="button"
+          label="Bekor qilish"
+          severity="secondary"
+          @click="addmodal = false"
+        ></Button>
+        <Button
+          type="button"
+          severity="success"
+          :disabled="loadingbtn"
+          :label="loadingbtn ? 'Loading...' : 'Qo\'shish'"
+          @click="addCatalogue()"
+        ></Button>
+      </div>
+    </form>
   </Dialog>
   <!-- End Add Modal -->
-      <!-- Begin Edit Modal -->
-      <Dialog
+  <!-- Begin Edit Modal -->
+  <Dialog
     v-model:visible="editmodal"
     header="Tahrirlash"
     :style="{ width: '25rem' }"
   >
-    <span class="text-surface-500 dark:text-surface-400 block mb-8">
-        <input type="text" v-model="editinput" placeholder="Katalog nomi" class="border w-full p-2 rounded-lg outline-green-500">
-    </span>
-    <div class="flex justify-end gap-2">
-      <Button
-        type="button"
-        label="Bekor qilish"
-        severity="secondary"
-        @click="editmodal=false"
-      ></Button>
-      <Button type="button" severity="success" :label="loadingbtn ? 'Loading...' : 'Tahrirlash'" @click="editCatalogue()"></Button>
-    </div>
+    <form>
+      <span class="text-surface-500 dark:text-surface-400 block mb-8">
+        <input
+          type="text"
+          v-model="editinput"
+          placeholder="Katalog nomi"
+          class="border w-full p-2 rounded-lg outline-green-500"
+        />
+      </span>
+      <div class="flex justify-end gap-2">
+        <Button
+          type="button"
+          label="Bekor qilish"
+          severity="secondary"
+          @click="editmodal = false"
+        ></Button>
+        <Button
+          type="button"
+          severity="success"
+          :disabled="loadingbtn"
+          :label="loadingbtn ? 'Loading...' : 'Tahrirlash'"
+          @click="editCatalogue()"
+        ></Button>
+      </div>
+    </form>
   </Dialog>
   <!-- End Edit Modal -->
 </template>
@@ -133,39 +170,42 @@ let catalogues = ref([]);
 
 const toast = useToast();
 const isloading = ref(true);
-const loadingbtn=ref(false);
+const loadingbtn = ref(false);
 const searchValue = ref("");
 const notfound = ref(false);
 const visible = ref(false);
-const addmodal= ref(false);
-const addinput= ref('');
-const editmodal=ref(false);
-const editinput= ref('');
+const addmodal = ref(false);
+const addinput = ref("");
+const editmodal = ref(false);
+const editinput = ref("");
 let productID = ref();
-const foundItem= ref()
+const foundItem = ref();
 
-function addModal(){
-    addmodal.value=true;
-    console.log(addmodal.value);
+function addModal() {
+  addmodal.value = true;
+  console.log(addmodal.value);
 }
 
-function addCatalogue(){
-  loadingbtn.value=true;
-    axios
-    .post(`https://menu-cafe.onrender.com/api/category/create`,
-    {
-      name:addinput.value,
-    }, 
-    {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjc1ZjBhMjA0ZDY2YWViM2Q1ZTk0ODFjIiwiaWF0IjoxNzM0Mzc0MzMyLCJleHAiOjE3MzY5NjYzMzJ9.NfHGphyboMaDe1xelel8ZLpr9arn5Ffe2_HSaD7xqP0`,
+function addCatalogue() {
+  loadingbtn.value = true;
+  axios
+    .post(
+      `/api/category/create`,
+      {
+        name: addinput.value,
       },
-    })
+      {
+        headers: {
+          Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjc1ZjBhMjA0ZDY2YWViM2Q1ZTk0ODFjIiwiaWF0IjoxNzM0Mzc0MzMyLCJleHAiOjE3MzY5NjYzMzJ9.NfHGphyboMaDe1xelel8ZLpr9arn5Ffe2_HSaD7xqP0`,
+        },
+      }
+    )
     .then((response) => {
       if (response.status == 200) {
-        loadingbtn.value=false;
-        addmodal.value=false;
-        showSuccess()
+        loadingbtn.value = false;
+        addmodal.value = false;
+        addinput.value = "";
+        showSuccess();
         GetCatalogues();
         console.log(response);
       }
@@ -175,29 +215,23 @@ function addCatalogue(){
     });
 }
 
-function editModal(id){
-  productID.value=id
-  editmodal.value=true;
-  let findobekt=catalogues.value.find((item)=>item._id==id)
-  editinput.value=findobekt?.name
+function editModal(id) {
+  productID.value = id;
+  editmodal.value = true;
+  let findobekt = catalogues.value.find((item) => item._id == id);
+  editinput.value = findobekt?.name;
 }
-function editCatalogue(){
-  loadingbtn.value=true;
-    axios
-    .put(`https://menu-cafe.onrender.com/api/category/${productID.value}`,
-    {
-      name:editinput.value,
-    }, 
-    {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjc1ZjBhMjA0ZDY2YWViM2Q1ZTk0ODFjIiwiaWF0IjoxNzM0Mzc0MzMyLCJleHAiOjE3MzY5NjYzMzJ9.NfHGphyboMaDe1xelel8ZLpr9arn5Ffe2_HSaD7xqP0`,
-      },
+function editCatalogue() {
+  loadingbtn.value = true;
+  axios
+    .put(`/api/category/${productID.value}`, {
+      name: editinput.value,
     })
     .then((response) => {
       if (response.status == 200) {
-        loadingbtn.value=false;
-        editmodal.value=false;
-        showSuccess()
+        loadingbtn.value = false;
+        editmodal.value = false;
+        showSuccess();
         GetCatalogues();
       }
     })
@@ -223,11 +257,7 @@ const search = computed(() => {
 });
 function GetCatalogues() {
   axios
-    .get(`https://menu-cafe.onrender.com/api/category/`, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjc1ZjBhMjA0ZDY2YWViM2Q1ZTk0ODFjIiwiaWF0IjoxNzM0Mzc0MzMyLCJleHAiOjE3MzY5NjYzMzJ9.NfHGphyboMaDe1xelel8ZLpr9arn5Ffe2_HSaD7xqP0`,
-      },
-    })
+    .get(`/api/category/`)
     .then((response) => {
       if (response.status == 200) {
         catalogues.value = response.data.data;
@@ -244,21 +274,19 @@ GetCatalogues();
 function DeleteModal(id) {
   productID.value = id;
   visible.value = true;
-  foundItem.value = catalogues.value.find((item) => item._id === id)
+  foundItem.value = catalogues.value.find((item) => item._id === id);
 }
 function DeleteCatalogues(id) {
   id = productID.value;
+  loadingbtn.value = true;
   axios
-    .delete(`https://menu-cafe.onrender.com/api/category/${id}`, {
-      headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjc1ZjBhMjA0ZDY2YWViM2Q1ZTk0ODFjIiwiaWF0IjoxNzM0Mzc0MzMyLCJleHAiOjE3MzY5NjYzMzJ9.NfHGphyboMaDe1xelel8ZLpr9arn5Ffe2_HSaD7xqP0`,
-      },
-    })
+    .delete(`/api/category/${id}`)
     .then((response) => {
       if (response.status == 200) {
         visible.value = false;
-        showSuccess()
+        showSuccess();
         GetCatalogues();
+        loadingbtn.value = false;
       }
     })
     .catch((error) => {
@@ -266,9 +294,13 @@ function DeleteCatalogues(id) {
     });
 }
 
-function showSuccess(){
-    toast.add({ severity: 'success', summary: 'Muvofaqqiyatli bajarildi', life: 3000 });
-};
+function showSuccess() {
+  toast.add({
+    severity: "success",
+    summary: "Muvofaqqiyatli bajarildi",
+    life: 3000,
+  });
+}
 </script>
 <style scoped>
 /* HTML: <div class="loader"></div> */

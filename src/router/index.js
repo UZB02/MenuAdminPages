@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AuthLayout from '@/layouts/Auth/AuthLayout.vue'
 import AppLayout from "../layouts/AppLayout.vue";
-
+import axios from "axios";
+axios.defaults.baseURL = "https://menu-cafe.onrender.com";
+axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem("token")}`;
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
