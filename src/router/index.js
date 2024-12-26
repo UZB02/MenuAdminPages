@@ -56,6 +56,30 @@ const router = createRouter({
         layout: AppLayout,
       },
     },
+    {
+      path: "/menu",
+      name: "Menu",
+      component: () => import("../views/MenuView.vue"),
+      meta: {
+        layout: AppLayout,
+      },
+    },
+    {
+      path: "/menu/add_menu",
+      name: "Add menu",
+      component: () => import("../views/AddMenuView.vue"),
+      meta: {
+        layout: AppLayout,
+      },
+    },
+    {
+      path: "/menu/edit/:id",
+      name: "Edit menu",
+      component: () => import("../views/EditMenuView.vue"),
+      meta: {
+        layout: AppLayout,
+      },
+    },
   ],
 });
 

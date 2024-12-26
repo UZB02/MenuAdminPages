@@ -41,7 +41,7 @@ const pages = [
   },
   {
     id: 2,
-    path: "/",
+    path: "/menu",
     title: "Menu",
     img: "https://doohda.com/upload/screen_image/16_screen_image.png",
   },
