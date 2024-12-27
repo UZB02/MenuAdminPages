@@ -146,16 +146,6 @@ function DeleteMenu(id){
     });
 }
 
-function EditModal(id) {
-  productID.value = id;
-  editmodal.value = true;
-  let findobekt = menu.value.find((item) => item._id == id);
-  editname.value = findobekt?.name;
-  editprice.value = findobekt?.price;
-  editdescription.value = findobekt.description;
-  console.log();
-}
-
 const search = computed(() => {
   if (searchValue.value) {
     let findobekt = menu.value.filter((item) =>
