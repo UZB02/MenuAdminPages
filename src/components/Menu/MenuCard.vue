@@ -61,11 +61,11 @@
   <!-- Begin Delete Modal -->
   <Dialog
     v-model:visible="visible"
-    :header="foundItem?.name"
+    header="O'chirish oynasi"
     :style="{ width: '25rem' }"
   >
     <span class="text-surface-500 dark:text-surface-400 block mb-8"
-      >Katalog o'chirilsinmi?</span
+      >{{ foundItem?.name }} o'chirilsinmi?</span
     >
     <div class="flex justify-end gap-2">
       <Button
