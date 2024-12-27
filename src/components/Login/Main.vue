@@ -71,18 +71,6 @@
             {{ isLoading ? "Loading..." : "Login"}}
           </button>
         </form>
-        <div
-          class="mt-4 text-sm flex flex-col md:flex-row gap-2 justify-between items-center container-mr"
-        >
-          <p class="mr-3 md:mr-0 text-white">
-            Agar siz ro'yxatdan o'tmagan bo'lsangiz Register tugmasini bosing..
-          </p>
-          <button
-            class=" register text-white underline font-semibold duration-300"
-          >
-            Register
-          </button>
-        </div>
       </div>
       <div class="md:block hidden w-1/2">
         <img
