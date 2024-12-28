@@ -45,13 +45,13 @@
       <RouterLink :to="`/menu/edit/${item._id}`" class="pi pi-pencil bg-white rounded-sm p-1 cursor-pointer"></RouterLink>
       </span>
       <div>
-          <img class="w-full h-52 object-cover" src="https://sun9-69.userapi.com/c858528/v858528199/d59fb/83aoxQjMXUI.jpg" alt="Rasm" />
+          <img class="w-full h-52 object-cover rounded-t-md" src="https://sun9-69.userapi.com/c858528/v858528199/d59fb/83aoxQjMXUI.jpg" alt="Rasm" />
          <div class="p-2 flex flex-col gap-1">
         <h2 class="font-bold text-xl">{{item.name}}</h2>
         <p class="text-sm line-clamp-1">{{item.description}}</p>
         <div class="flex flex-col gap-1">
           <span class="text-2xl font-bold line-clamp-1">{{item.price}} so'm</span>
-         <button class="bg-green-500 w-full p-2 text-white transition-all duration-200 active:scale-90 rounded-lg">Batafsil</button>
+         <button @click="router.push(`/menu/product/${item._id}`)" class="bg-green-500 w-full p-2 text-white transition-all duration-200 active:scale-90 rounded-lg">Batafsil</button>
         </div>
       </div>
       </div>

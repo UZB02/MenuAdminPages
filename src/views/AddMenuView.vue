@@ -122,8 +122,22 @@ const handleFileChange = (event) => {
   if (event && event.target && event.target.files) {
     const file = event.target.files[0]; // Faylni olamiz
     if (file) {
-      img.value = URL.createObjectURL(file);
-      console.log(img.value);
+      const imgURL = URL.createObjectURL(file); // Fayl uchun URL yaratiladi
+      img.value = imgURL;
+
+      const formData = new FormData(); // FormData obyektini yarating
+      formData.append("image", img.value); // Faylni qo'shing
+
+      axios
+        .post(`api/upload/`, formData)
+        .then((response) => {
+          if (response.status === 200) {
+            console.log(response);
+          }
+        })
+        .catch((error) => {
+          console.error("Xatolik yuz berdi:", error);
+        });
     }
   } else {
     console.error("Event yoki target noto'g'ri ishlamoqda");

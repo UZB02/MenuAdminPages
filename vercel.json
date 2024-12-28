@@ -25,6 +25,10 @@
       "dest": "/index.html"
     },
     {
+      "src": "/menu/product/:id",
+      "dest": "/index.html"
+    },
+    {
       "src": "/menu",
       "dest": "/index.html"
     }

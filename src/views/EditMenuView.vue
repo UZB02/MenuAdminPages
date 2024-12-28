@@ -45,7 +45,8 @@
               />
             </div>
           </div>
-          <div>
+          <div class="grid xs:grid-cols-2 grid-cols-1 gap-2">
+              <div>
             <label for="">Narxi</label>
             <input
               type="number"
@@ -53,6 +54,19 @@
               placeholder="25000"
               class="border w-full p-2 rounded-lg outline-green-500"
             />
+          </div>
+             <div>
+              <label for="">Katalogini tanlang</label>
+              <select
+                v-model="editcatalog"
+                id=""
+                class="border w-full p-2 rounded-lg outline-green-500"
+              >
+                <option v-for="item in allcatalogues" :value="item.name">
+                  {{ item.name ? item.name : "Qayta urunib ko'ring" }}
+                </option>
+              </select>
+            </div>
           </div>
           <div>
             <label for="">Ma'lumot</label>
@@ -103,6 +117,8 @@ const editdescription = ref("");
 const editprice = ref("");
 const editimg = ref("");
 const loadingbtn = ref(false);
+const allcatalogues = ref([]);
+const editcatalog = ref("");
 
 function GetProduct() {
   axios
@@ -113,6 +129,7 @@ function GetProduct() {
         editname.value = response.data.name;
         editprice.value = response.data.price;
         editdescription.value = response.data.description;
+        editcatalog.value = response.data.category
         console.log(response.data);
       }
     })
@@ -142,6 +159,21 @@ function EditProduct() {
       console.error("Xatolik yuz berdi:", error);
     });
 }
+
+function GetCatalogues() {
+  axios
+    .get(`/api/category/`)
+    .then((response) => {
+      if (response.status == 200) {
+        allcatalogues.value = response.data.data;
+        console.log(response.data.data);
+      }
+    })
+    .catch((error) => {
+      console.error("Xatolik yuz berdi:", error);
+    });
+}
+GetCatalogues();
 
 function showSuccess() {
   toast.add({

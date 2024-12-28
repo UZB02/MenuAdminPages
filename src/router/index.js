@@ -80,6 +80,14 @@ const router = createRouter({
         layout: AppLayout,
       },
     },
+    {
+      path: "/menu/product/:id",
+      name: "Product",
+      component: () => import("../views/ProductIdView.vue"),
+      meta: {
+        layout: AppLayout,
+      },
+    },
   ],
 });
 
