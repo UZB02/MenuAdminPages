@@ -5,7 +5,7 @@
                 <img @click="router.push(`/`)" class="w-11 cursor-pointer" src="https://yt3.googleusercontent.com/ytc/AOPolaTt_GOD4rxntso-OOkG93lyMNbKuCEE1-_A_Rvb=s900-c-k-c0x00ffffff-no-rj" alt="">
             </div>
             <div class="right">
-                   <Button type="button" label="Logout" icon="pi pi-sign-out" :loading="loading" @click="logout" />
+                   <Button type="button" label="Logout" icon="pi pi-sign-out"  @click="logout" />
             </div>
         </div>
     </nav>
