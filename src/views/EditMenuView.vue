@@ -147,6 +147,7 @@ function EditProduct() {
       price: editprice.value,
       description: editdescription.value,
       image: editimg.value,
+      category: editcatalog.value,
     })
     .then((response) => {
       if (response.status == 200) {
